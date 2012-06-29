@@ -2,10 +2,10 @@
 
 namespace SmartCore\Module\Texter\Controller;
 
-use SmartCore\Bundle\EngineBundle\Engine\Module;
-use SmartCore\Bundle\EngineBundle\Controller\Controller;
+use SmartCore\Bundle\EngineBundle\Controller\Module;
+//use SmartCore\Bundle\EngineBundle\Controller\Controller;
 
-class TestController extends Controller // Module
+class TestController extends Module // Controller
 {
     public function indexAction($text = 888)
     {

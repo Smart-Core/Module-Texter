@@ -2,7 +2,7 @@
 
 namespace SmartCore\Module\Texter\Controller;
 
-use SmartCore\Bundle\EngineBundle\Engine\Module;
+use SmartCore\Bundle\EngineBundle\Controller\Module;
 
 class Texter extends Module
 {
