@@ -8,14 +8,21 @@ use SmartCore\Bundle\EngineBundle\Response;
 class TestController extends Module
 {
     /**
+     * ИД текстовой записи.
+     * 
+     * @var int
+     */
+    protected $text_item_id = 0;
+    
+    protected $editor = 0;
+
+    /**
      * Конструктор.
      * 
      * @return void
      */
     protected function init()
     {
-        //$this->setVersion(0.4);
-        
         $this->NodeProperties->setDefaultParams(array(
             'text_item_id'    => 0,
             'editor'        => 1,

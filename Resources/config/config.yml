@@ -1,0 +1,16 @@
+
+# Контроллер по умолчанию, который будет вызываться из ноды.
+default_controller: Texter:run
+descr: Статические текстовые блоки.
+
+# Установка дефолтных значений для контролеров, а также 
+defaults:
+    Texter:
+        editor:
+            label: Редактор
+            type: checkbox
+            value: true
+        text_item_id:
+            label: ID текстового поля
+            type: int
+            value: 0
