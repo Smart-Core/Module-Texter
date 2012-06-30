@@ -2,8 +2,8 @@
 
 namespace SmartCore\Module\Texter;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use SmartCore\Bundle\EngineBundle\ModuleBundle;
 
-class SmartCoreTexterModule extends Bundle
+class SmartCoreTexterModule extends ModuleBundle
 {
 }
