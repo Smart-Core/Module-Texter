@@ -7,7 +7,7 @@ use SmartCore\Bundle\EngineBundle\Response;
 
 class TexterController extends Module
 {
-	/**
+    /**
      * Для каждого экземпляра ноды хранится ИД текстовой записи.
      * @var int
      */

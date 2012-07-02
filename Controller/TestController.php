@@ -23,12 +23,6 @@ class TestController extends Module
      */
     protected function init()
     {
-        /*
-        $this->View->setOptions(array(
-            'engine'        => 'simple',
-            'template_ext' => '.tpl',
-        ));
-        */
         $this->View->setRenderMethod('echoProperties');
     }
 
