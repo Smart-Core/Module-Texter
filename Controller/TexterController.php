@@ -2,10 +2,10 @@
 
 namespace SmartCore\Module\Texter\Controller;
 
-use SmartCore\Bundle\EngineBundle\Controller\Module;
+use SmartCore\Bundle\EngineBundle\Module\Controller;
 use SmartCore\Bundle\EngineBundle\Response;
 
-class TexterController extends Module
+class TexterController extends Controller
 {
     /**
      * Для каждого экземпляра ноды хранится ИД текстовой записи.

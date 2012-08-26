@@ -1,0 +1,11 @@
+
+Сущности
+========
+
+Сейчас PRIMARY_KEY используется только для history_id (TextItemHistory) и для 
+item_id (TextItem), но в идеале было бы хорошо сделать его композитными с 
+site_id (TextItemHistory) и site_id и language_id (TextItem).
+
+Это даст только одно преимущество: интергация сайта в существующую платформу.
+
+
