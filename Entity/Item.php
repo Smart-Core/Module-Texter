@@ -3,6 +3,7 @@
 namespace SmartCore\Module\Texter\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         indexes={
  *             @ORM\Index(name="site_id", columns={"site_id"}),
  *         }
-* )
+ * )
  */
 class Item
 {
@@ -27,7 +28,7 @@ class Item
      * ORM\Id
      * ORM\GeneratedValue(strategy="NONE")
      */
-    protected $site_id = 0;
+    protected $site_id;
 
     /**
      * @ORM\Column(type="string", length=8, nullable=TRUE)
@@ -40,18 +41,45 @@ class Item
     protected $text = '';
 
     /**
-     * @ORM\Column(type="text", nullable=TRUE)
+     * @ORM\Column(type="array")
      */
-    protected $meta = null;
+    protected $meta;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $create_datetime;
+    protected $datetime;
 
     /**
      * @ORM\Column(type="integer")
      */
-    protected $create_user_id = 0;
+    protected $user_id = 0;
+    
+    public function __construct()
+    {
+        //parent::__construct();
+        $this->datetime = new \DateTime();
+        $this->language = 'ru';
+        $this->site_id = 0;
+        $this->meta = new ArrayCollection();
+    }
 
+    /**
+     * NewFunction
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+    
+    public function getText()
+    {
+        return $this->text;
+    }
+
+
+    public function getMeta()
+    {
+        return $this->meta;
+    }
 }

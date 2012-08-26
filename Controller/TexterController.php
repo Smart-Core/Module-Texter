@@ -37,57 +37,33 @@ class TexterController extends Controller
     }
 
     /**
-     * Эекшен по умолчанию.
-     * 
-     * @todo подумать как лучше его называть? в CMF-ке сейчас run($parser_data).
+     * Экшен по умолчанию.
      */
-    public function indexAction($text = null)
+    public function indexAction()
     {
-        if ($text) {
-            $this->View->text = $text;
-        } else {
-            $text_item = $this->getText($this->text_item_id);
+        /*        
+        $item = $this->DQL('
+            SELECT i 
+            FROM SmartCoreTexterModule:Item i 
+            WHERE i.item_id = :item_id 
+            AND i.site_id = :site_id')
+        ->setParameters(array(
+            'item_id' => $this->text_item_id,
+            'site_id' => $this->Site->getId(),
+        ))->getSingleResult();
+        */
+        
+        $item = $this->getRepo('SmartCoreTexterModule:Item')->findOneBy(array(
+            'item_id' => $this->text_item_id,
+            'site_id' => $this->Site->getId(),
+        ));
+        
+        $this->View->text = $item->getText();
 
-            if (is_array($text_item['meta']) and !empty($text_item['meta'])) {
-                foreach ($text_item['meta'] as $key => $value) {
-                    $this->Html->meta($key, $value);
-                }
-            }
-            
-            $this->View->text = $text_item['text'];
+        foreach ($item->getMeta() as $key => $value) {
+            $this->engine('html')->meta($key, $value);
         }
         
         return new Response($this->View);
     }
-    
-    /**
-     * Получение текста из базы.
-     * 
-     * @uses Log
-     * 
-     * @param int $item_id
-     * @return text
-     * 
-     * @todo мультиязычность.
-     * @todo вынести в Модель.
-     */
-    protected function getText($item_id)
-    {
-        $sql = "SELECT text, item_id, meta
-            FROM {$this->DB->prefix()}text_items
-            WHERE item_id = '$item_id'
-            AND language_id = 'ru'
-            AND site_id = '{$this->Site->getId()}' ";
-        if ($row = $this->DB->fetchAssoc($sql)) {
-            if (isset($row['meta']) and ! empty($row['meta'])) {
-                $row['meta'] = unserialize($row['meta']);
-            }
-            return $row;
-        } else {
-            // @todo сделать нормальный логгер системных ошибок с применением debug_backtrace()
-            $stack = "\nFile: " . __FILE__ . "\nLine: ". __LINE__ . "\nClass: " . __CLASS__ . "\nMethod: " . __METHOD__;
-            //Log::getInstance()->write('system', "Message: item_id = $item_id is not accessible. $stack");
-            return false;
-        }
-    }    
 }

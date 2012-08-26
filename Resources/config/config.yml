@@ -5,12 +5,11 @@ descr: Статические текстовые блоки.
 
 # Установка дефолтных значений для контролеров, а также некоторая инфа о типе этих свойств.
 defaults:
-    Texter:
-        editor:
-            label: Редактор
-            type: checkbox
-            value: true
-        text_item_id:
-            label: ID текстового поля
-            type: int
-            value: 0
+    editor:
+        label: Редактор
+        type: checkbox
+        value: true
+    text_item_id:
+        label: ID текстового поля
+        type: int
+        value: 0
