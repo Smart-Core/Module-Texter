@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ORM\Entity
  * 
- * @ORM\Table(name="aaa_text_items_history",
+ * @ORM\Table(name="text_items_history",
  *         indexes={
  *             @ORM\Index(name="item_id", columns={"item_id"}),
  *             @ORM\Index(name="is_deleted", columns={"is_deleted"}),
