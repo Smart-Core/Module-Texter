@@ -45,7 +45,7 @@ class TexterController extends Controller
             AND i.site_id = :site_id')
         ->setParameters(array(
             'item_id' => $this->text_item_id,
-            'site_id' => $this->Site->getId(),
+            'site_id' => $this->engine('site')->getId(),
         ))->getSingleResult();
         */
     
