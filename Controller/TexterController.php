@@ -36,27 +36,13 @@ class TexterController extends Controller
         $this->View->setRenderMethod('echoProperties');
     }
 
-
-        /*        
-        $item = $this->DQL('
-            SELECT i 
-            FROM SmartCoreTexterModule:Item i 
-            WHERE i.item_id = :item_id 
-            AND i.site_id = :site_id')
-        ->setParameters(array(
-            'item_id' => $this->text_item_id,
-            'site_id' => $this->engine('site')->getId(),
-        ))->getSingleResult();
-        */
-    
     /**
      * Экшен по умолчанию.
      */
     public function indexAction()
     {
-        $item = $this->getRepo('SmartCoreTexterModule:Item')->findOneBy(array(
+        $item = $this->getRepo('TexterModule:Item')->findOneBy(array(
             'item_id' => $this->text_item_id,
-            'site_id' => $this->engine('site')->getId(),
         ));
         
         $this->View->text = $item->getText();

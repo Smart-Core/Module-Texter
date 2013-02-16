@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  *         indexes={
  *             @ORM\Index(name="item_id", columns={"item_id"}),
  *             @ORM\Index(name="is_deleted", columns={"is_deleted"}),
- *             @ORM\Index(name="site_id", columns={"site_id"}),
  *         }
  * )
  */
@@ -23,11 +22,6 @@ class TextItemHistory
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $history_id;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $site_id = 0;
     
     /**
      * @ORM\Column(type="boolean")

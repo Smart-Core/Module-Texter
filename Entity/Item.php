@@ -7,11 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="text_items",
- *         indexes={
- *             @ORM\Index(name="site_id", columns={"site_id"}),
- *         }
- * )
+ * @ORM\Table(name="text_items")
  */
 class Item
 {
@@ -22,14 +18,6 @@ class Item
      */
     protected $item_id;
     
-    /**
-     * @ORM\Column(type="integer")
-     * 
-     * ORM\Id
-     * ORM\GeneratedValue(strategy="NONE")
-     */
-    protected $site_id;
-
     /**
      * @ORM\Column(type="string", length=8, nullable=TRUE)
      */
@@ -57,26 +45,15 @@ class Item
     
     public function __construct()
     {
-        //parent::__construct();
         $this->datetime = new \DateTime();
         $this->language = 'ru';
-        $this->site_id = 0;
         $this->meta = new ArrayCollection();
     }
 
-    /**
-     * NewFunction
-     */
-    public function getSiteId()
-    {
-        return $this->site_id;
-    }
-    
     public function getText()
     {
         return $this->text;
     }
-
 
     public function getMeta()
     {
