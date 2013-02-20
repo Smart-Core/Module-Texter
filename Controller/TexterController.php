@@ -19,22 +19,6 @@ class TexterController extends Controller
      * @var string
      */
     protected $editor = 0;
-    
-    /**
-     * Конструктор.
-     * 
-     * @return void
-     */
-    protected function init()
-    {
-        /*
-        $this->View->setOptions(array(
-            'engine'       => 'simple',
-            'template_ext' => '.tpl',
-        ));
-        */
-        $this->View->setRenderMethod('echoProperties');
-    }
 
     /**
      * Экшен по умолчанию.
@@ -44,7 +28,8 @@ class TexterController extends Controller
         $item = $this->getRepo('TexterModule:Item')->findOneBy(array(
             'item_id' => $this->text_item_id,
         ));
-        
+
+        $this->View->setEngine('echo');
         $this->View->text = $item->getText();
 
         foreach ($item->getMeta() as $key => $value) {
