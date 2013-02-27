@@ -2,10 +2,10 @@
 
 namespace SmartCore\Module\Texter\Controller;
 
-use SmartCore\Bundle\EngineBundle\Controller\Module;
+use SmartCore\Bundle\EngineBundle\Module\Controller;
 use SmartCore\Bundle\EngineBundle\Response;
 
-class TestController extends Module
+class TestController extends Controller
 {
     /**
      * ИД текстовой записи.
@@ -28,14 +28,14 @@ class TestController extends Module
 
     public function indexAction($text = 888)
     {
-        return $this->render("SmartCoreTexterModule::texter.html.twig", array(
+        return $this->render('TexterModule::texter.html.twig', array(
             'text' => $text,
         ));
     }
 
     public function helloAction($text = 'Hello')
     {
-        return $this->render("SmartCoreTexterModule::hello.html.twig", array(
+        return $this->render('TexterModule::hello.html.twig', array(
             'text' => $text,
         ));
     }
