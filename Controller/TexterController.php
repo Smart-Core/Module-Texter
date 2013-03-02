@@ -4,6 +4,7 @@ namespace SmartCore\Module\Texter\Controller;
 
 use SmartCore\Bundle\EngineBundle\Module\Controller;
 use SmartCore\Bundle\EngineBundle\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class TexterController extends Controller
 {
@@ -22,20 +23,30 @@ class TexterController extends Controller
 
     /**
      * Экшен по умолчанию.
+     *
+     * @param integer $item_id
      */
-    public function indexAction()
+    public function indexAction($item_id = null)
     {
-        $item = $this->getRepo('TexterModule:Item')->findOneBy(array(
-            'item_id' => $this->text_item_id,
-        ));
+        $item = $this->getRepo('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
 
         $this->View->setEngine('echo');
         $this->View->text = $item->getText();
 
         foreach ($item->getMeta() as $key => $value) {
-            $this->engine('html')->meta($key, $value);
+            $this->get('html')->meta($key, $value);
         }
         
         return new Response($this->View);
+    }
+
+    /**
+     * Обработчик POST данных.
+     *
+     * @return Response
+     */
+    public function postAction(Request $request)
+    {
+        return new Response();
     }
 }
