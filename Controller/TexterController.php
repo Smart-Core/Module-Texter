@@ -5,6 +5,7 @@ namespace SmartCore\Module\Texter\Controller;
 use SmartCore\Bundle\EngineBundle\Module\Controller;
 use SmartCore\Bundle\EngineBundle\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TexterController extends Controller
 {
@@ -31,6 +32,7 @@ class TexterController extends Controller
         $item = $this->getRepo('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
 
         $this->View->setEngine('echo');
+        //$this->View->setEngine('twig');
         $this->View->text = $item->getText();
 
         foreach ($item->getMeta() as $key => $value) {
@@ -45,8 +47,26 @@ class TexterController extends Controller
      *
      * @return Response
      */
-    public function postAction(Request $request)
+    public function postAction(Request $request, $item_id = null)
     {
-        return new Response();
+        $data = $request->request->get('texter');
+        $item = $this->getRepo('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
+
+        $item->setText($data['text']);
+        $item->setMeta($data['meta']);
+
+        try {
+            $this->EM()->persist($item);
+            $this->EM()->flush();
+        } catch (\Exception $e) {
+            $errors = array();
+            if ($this->get('kernel')->isDebug()) {
+                $errors['sql_debug'] = $e->getMessage();
+            }
+
+            return new JsonResponse(array('status' => 'INVALID', 'message' => 'Ошибка при сохранении данных.', 'errors' => $errors));
+        }
+
+        return new JsonResponse(array('status' => 'OK', 'message' => 'Текст обновлён'));
     }
 }

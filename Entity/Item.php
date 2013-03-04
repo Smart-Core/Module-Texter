@@ -21,12 +21,12 @@ class Item
     /**
      * @ORM\Column(type="string", length=8, nullable=TRUE)
      */
-    protected $language = null;
+    protected $language;
     
     /**
      * @ORM\Column(type="text")
      */
-    protected $text = '';
+    protected $text;
 
     /**
      * @ORM\Column(type="array")
@@ -48,6 +48,7 @@ class Item
         $this->datetime = new \DateTime();
         $this->language = 'ru';
         $this->meta = new ArrayCollection();
+        $this->text = null;
     }
 
     public function getText()
@@ -58,5 +59,21 @@ class Item
     public function getMeta()
     {
         return $this->meta;
+    }
+
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    public function setMeta($meta)
+    {
+        foreach($meta as $key => $value) {
+            if (empty($value)) {
+                unset($meta[$key]);
+            }
+        }
+
+        $this->meta = $meta;
     }
 }

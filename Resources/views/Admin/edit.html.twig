@@ -85,11 +85,11 @@
     <div class="tab-pane" id="meta">
         <div class="row">
             <div class="span2"><label for="keywords">Keywords</label></div>
-            <div class="span9"><input type="text" name="texter[keywords]" id="keywords" value="" class="focused input-block-level"  /></div>
+            <div class="span9"><input type="text" name="texter[meta][keywords]" id="keywords" value="{% if meta.keywords is defined %}{{ meta.keywords }}{% endif %}" class="focused input-block-level"  /></div>
         </div>
         <div class="row">
             <div class="span2"><label for="description">Description</label></div>
-            <div class="span9"><input type="text" name="texter[description]" id="description" value="" class="input-block-level"  /></div>
+            <div class="span9"><input type="text" name="texter[meta][description]" id="description" value="{% if meta.description is defined %}{{ meta.description }}{% endif %}" class="input-block-level"  /></div>
         </div>
     </div>
     <div class="tab-pane" id="preview">@todo preview</div>
@@ -99,7 +99,7 @@
 <p class="text-center">
     <button class="btn btn-primary" type="submit" name="submit" value="update">Сохранить</button>
     {#<input class="btn btn-primary" type="submit" name="submit[update]" value="Сохранить" />#}
-    <button class="btn btn-link" name="submit[cancel]" value="cancel">Отменить</button>
+    <button class="btn btn-link" name="submit" value="cancel">Отменить</button>
 </p>
 </form>
 

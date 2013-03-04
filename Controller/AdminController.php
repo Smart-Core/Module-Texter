@@ -32,6 +32,7 @@ class AdminController extends Controller
         return $this->render('TexterModule:Admin:edit.html.twig', array(
             '_node_id' => $this->node['id'],
             'text' => $item->getText(),
+            'meta' => $item->getMeta(),
         ));
     }
 }
