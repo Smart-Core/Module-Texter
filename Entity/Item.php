@@ -24,7 +24,7 @@ class Item
     protected $language;
     
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=TRUE)
      */
     protected $text;
 
@@ -47,8 +47,18 @@ class Item
     {
         $this->datetime = new \DateTime();
         $this->language = 'ru';
-        $this->meta = new ArrayCollection();
+        $this->meta = null; //new ArrayCollection();
         $this->text = null;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
+    public function getId()
+    {
+        return $this->item_id;
     }
 
     public function getText()
@@ -75,5 +85,15 @@ class Item
         }
 
         $this->meta = $meta;
+    }
+
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 }
