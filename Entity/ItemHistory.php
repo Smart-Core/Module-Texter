@@ -5,8 +5,7 @@ namespace SmartCore\Module\Texter\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ORM\Entity
- * 
+ * @ORM\Entity
  * @ORM\Table(name="text_items_history",
  *         indexes={
  *             @ORM\Index(name="item_id", columns={"item_id"}),
@@ -14,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         }
  * )
  */
-class TextItemHistory
+class ItemHistory
 {
     /**
      * @ORM\Id
