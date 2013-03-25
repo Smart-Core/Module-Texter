@@ -47,7 +47,7 @@ class Item
     {
         $this->datetime = new \DateTime();
         $this->language = 'ru';
-        $this->meta = null; //new ArrayCollection();
+        $this->meta = array(); //new ArrayCollection();
         $this->text = null;
     }
 
