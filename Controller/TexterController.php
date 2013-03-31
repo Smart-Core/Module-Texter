@@ -38,8 +38,21 @@ class TexterController extends Controller
         foreach ($item->getMeta() as $key => $value) {
             $this->get('html')->meta($key, $value);
         }
-        
-        return new Response($this->View);
+
+        $response = new Response($this->View);
+
+        if ($this->getEip()) {
+            $response->setFrontControls(array(
+                'edit' => array(
+                    'title' => 'Редактировать',
+                    'descr' => 'Текстовый блок',
+                    'uri' => $this->generateUrl('cmf_admin_structure_node', array('id' => $this->node->getId())),
+                    'default' => true,
+                ),
+            ));
+        }
+
+        return $response;
     }
 
     /**

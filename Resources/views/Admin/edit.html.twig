@@ -103,12 +103,16 @@
 </p>
 </form>
 
-<script>
-$('#myTab a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-    $(this.hash + ' input.focused').focus();
-    tinyMCE.get($(this.hash + ' textarea.focused').attr('id')).focus();
-});
-</script>
 {% endblock body %}
+
+{% block body_js %}
+{{ parent() }}
+<script>
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $(this.hash + ' input.focused').focus();
+        tinyMCE.get($(this.hash + ' textarea.focused').attr('id')).focus();
+    });
+</script>
+{% endblock body_js %}
