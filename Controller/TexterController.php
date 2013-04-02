@@ -80,6 +80,6 @@ class TexterController extends Controller
             return new JsonResponse(array('status' => 'INVALID', 'message' => 'Ошибка при сохранении данных.', 'errors' => $errors));
         }
 
-        return new JsonResponse(array('status' => 'OK', 'message' => 'Текст обновлён'));
+        return new JsonResponse(array('status' => 'OK', 'message' => 'Текст обновлён', 'redirect' => $this->get('engine.folder')->getUri($this->node->getFolder()->getId())));
     }
 }
