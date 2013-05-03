@@ -25,7 +25,9 @@ class AdminController extends Controller
      */
     public function indexAction($slug = null)
     {
-        $item = $this->getRepo('TexterModule:Item')->findOneBy(array(
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $item = $em->getRepository('TexterModule:Item')->findOneBy(array(
             'item_id' => $this->text_item_id,
         ));
 

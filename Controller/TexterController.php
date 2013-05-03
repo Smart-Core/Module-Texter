@@ -29,7 +29,9 @@ class TexterController extends Controller
      */
     public function indexAction($item_id = null)
     {
-        $item = $this->getRepo('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $item = $em->getRepository('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
 
         $this->View->setEngine('echo');
         //$this->View->setEngine('twig');
@@ -62,15 +64,17 @@ class TexterController extends Controller
      */
     public function postAction(Request $request, $item_id = null)
     {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
         $data = $request->request->get('texter');
-        $item = $this->getRepo('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
+        $item = $em->getRepository('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
 
         $item->setText($data['text']);
         $item->setMeta($data['meta']);
 
         try {
-            $this->EM()->persist($item);
-            $this->EM()->flush();
+            $em->persist($item);
+            $em->flush();
         } catch (\Exception $e) {
             $errors = array();
             if ($this->get('kernel')->isDebug()) {
