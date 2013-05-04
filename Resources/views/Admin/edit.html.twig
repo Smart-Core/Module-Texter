@@ -72,7 +72,8 @@
     <li><a href="#history">История правок</a></li>
 </ul>
 
-<form action="{{ form_action }}" method="post">
+{# {{ form_action }} #}
+<form action="" method="post">
 <input type="hidden" name="_node_id" value="{{ _node_id }}" />
 
 <div class="tab-content">
@@ -93,7 +94,7 @@
         </div>
     </div>
     <div class="tab-pane" id="preview">@todo preview</div>
-    <div class="tab-pane" id="history">todo history</div>
+    <div class="tab-pane" id="history">@todo history</div>
 </div>
 
 <p class="text-center">
