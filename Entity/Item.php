@@ -30,6 +30,8 @@ class Item
 
     /**
      * @ORM\Column(type="array")
+     *
+     * @var array
      */
     protected $meta;
 
@@ -47,13 +49,13 @@ class Item
     {
         $this->datetime = new \DateTime();
         $this->language = 'ru';
-        $this->meta = array(); //new ArrayCollection();
+        $this->meta = []; //new ArrayCollection();
         $this->text = null;
     }
 
     public function __toString()
     {
-        return (string) $this->getId();
+        return $this->getText();
     }
 
     public function getId()
@@ -66,25 +68,35 @@ class Item
         return $this->text;
     }
 
-    public function getMeta()
-    {
-        return $this->meta;
-    }
-
     public function setText($text)
     {
         $this->text = $text;
     }
 
+    public function getMeta()
+    {
+        if ($this->meta) {
+            return $this->meta;
+        } else {
+            return [];
+        }
+    }
+
     public function setMeta($meta)
     {
-        foreach($meta as $key => $value) {
-            if (empty($value)) {
-                unset($meta[$key]);
+        if (is_array($meta)) {
+            foreach($meta as $key => $value) {
+                if (empty($value)) {
+                    unset($meta[$key]);
+                }
             }
+        } else {
+            $this->meta = [];
         }
 
         $this->meta = $meta;
+
+        return $this;
     }
 
     public function setUserId($user_id)

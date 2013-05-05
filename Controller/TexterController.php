@@ -2,26 +2,12 @@
 
 namespace SmartCore\Module\Texter\Controller;
 
-use SmartCore\Bundle\EngineBundle\Module\Controller;
 use SmartCore\Bundle\EngineBundle\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TexterController extends Controller
 {
-    /**
-     * Для каждого экземпляра ноды хранится ИД текстовой записи.
-     * @var int
-     */
-    protected $text_item_id;
-
-    /**
-     * Какой редактор использовать.
-     * !!!note: пока используется как флаг, где 0 - не использовать визивиг, а 1 - использовать.
-     * @var string
-     */
-    protected $editor = 0;
-
     /**
      * Экшен по умолчанию.
      *
@@ -31,7 +17,7 @@ class TexterController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $item = $em->getRepository('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
+        $item = $em->find('TexterModule:Item', $item_id ? $item_id : $this->text_item_id);
 
         $this->View->setEngine('echo');
         //$this->View->setEngine('twig');
@@ -44,14 +30,14 @@ class TexterController extends Controller
         $response = new Response($this->View);
 
         if ($this->getEip()) {
-            $response->setFrontControls(array(
-                'edit' => array(
+            $response->setFrontControls([
+                'edit' => [
                     'title' => 'Редактировать',
                     'descr' => 'Текстовый блок',
-                    'uri' => $this->generateUrl('cmf_admin_structure_node', array('id' => $this->node->getId())),
+                    'uri' => $this->generateUrl('cmf_admin_structure_node', ['id' => $this->node->getId()]),
                     'default' => true,
-                ),
-            ));
+                ],
+            ]);
         }
 
         return $response;
@@ -66,9 +52,16 @@ class TexterController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $data = $request->request->get('texter');
         $item = $em->getRepository('TexterModule:Item')->find($item_id ? $item_id : $this->text_item_id);
 
+        if (empty($item)) {
+            return new JsonResponse([
+                'status' => 'INVALID',
+                'message' => 'Item does not exist', // 'Запись не найдена.'
+            ], 400);
+        }
+
+        $data = $request->request->get('texter');
         $item->setText($data['text']);
         $item->setMeta($data['meta']);
 
@@ -76,14 +69,29 @@ class TexterController extends Controller
             $em->persist($item);
             $em->flush();
         } catch (\Exception $e) {
-            $errors = array();
+            $errors = [];
             if ($this->get('kernel')->isDebug()) {
                 $errors['sql_debug'] = $e->getMessage();
             }
 
-            return new JsonResponse(array('status' => 'INVALID', 'message' => 'Ошибка при сохранении данных.', 'errors' => $errors));
+            return new JsonResponse([
+                'status' => 'INVALID',
+                'message' => 'Error update.', //'Ошибка при сохранении данных.',
+                'errors' => $errors
+            ], 400);
         }
 
-        return new JsonResponse(array('status' => 'OK', 'message' => 'Текст обновлён', 'redirect' => $this->get('engine.folder')->getUri($this->node->getFolder()->getId())));
+        $url = $request->request->get('referer', $request->headers->get('referer'));
+
+        if (empty($url)) {
+            $url = $this->get('engine.folder')->getUri($this->node->getFolder()->getId());
+        }
+
+        return new JsonResponse([
+            'status' => 'OK',
+            'message' => 'Text updated succesful.', //'Текст обновлён',
+            'redirect' => $url,
+        ]);
+//        ], 302, ['Location', $url]);
     }
 }
