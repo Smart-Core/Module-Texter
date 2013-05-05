@@ -89,7 +89,7 @@ class TexterController extends Controller
 
         return new JsonResponse([
             'status' => 'OK',
-            'message' => 'Text updated succesful.', //'Текст обновлён',
+            'message' => 'Text updated successful.', //'Текст обновлён',
             'redirect' => $url,
         ]);
 //        ], 302, ['Location', $url]);
