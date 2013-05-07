@@ -20,8 +20,8 @@ class TexterModule extends Bundle
         $em->persist($item);
         $em->flush();
 
-        $node->setParams(array(
+        $node->setParams([
             'text_item_id' => $item->getId()
-        ));
+        ]);
     }
 }

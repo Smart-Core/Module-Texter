@@ -11,15 +11,15 @@ class NodePropertiesFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text_item_id', 'integer', array('attr' => array('class' => 'focused')))
+            ->add('text_item_id', 'integer', ['attr' => ['class' => 'focused']])
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'csrf_protection' => false,
-        ));
+        ]);
     }
 
     public function getName()

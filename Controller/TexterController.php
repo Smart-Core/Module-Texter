@@ -34,7 +34,7 @@ class TexterController extends Controller
                 'edit' => [
                     'title' => 'Редактировать',
                     'descr' => 'Текстовый блок',
-                    'uri' => $this->generateUrl('cmf_admin_structure_node', ['id' => $this->node->getId()]),
+                    'uri' => $this->generateUrl('cmf_admin_node', ['id' => $this->node->getId()]),
                     'default' => true,
                 ],
             ]);
