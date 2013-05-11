@@ -1,7 +1,8 @@
-{% extends app.request.xmlHttpRequest ? '@SmartCoreEngine/ajax.html.twig' : '@SmartCoreEngine/admin.html.twig' %}
+{% extends app.request.xmlHttpRequest ? '@SmartCoreEngine/ajax.html.twig' : '@SmartCoreEngine/Admin/module.html.twig' %}
 
-{% block html_head_scripts %}
-{{ parent() }}
+{% block html_head_title %}Редактирование: {{ item.id }} Текстер / {{ parent() }}{% endblock html_head_title %}
+
+{% block html_head_scripts %}{{ parent() }}
     <script src="{{ app.request.basePath }}/assets/tinymce/3.5.8/jquery.tinymce.js" type="text/javascript" ></script>
     <script type="text/javascript">
     function myCustomOnInit() {
@@ -62,7 +63,7 @@
     </script>
 {% endblock html_head_scripts %}
 
-{% block body %}
+{% block content %}
 
 <ul class="nav nav-tabs" id="myTab">
     <li class="active"><a href="#text">Редатор</a></li>
@@ -78,7 +79,7 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="text">
-        <textarea class="tinymce focused" name="texter[text]" style="width: 96%; height: 380px;" rows="20" id="textarea_ru">{{ text|raw }}</textarea>
+        <textarea class="tinymce focused" name="texter[text]" style="width: 96%; height: 380px;" rows="20" id="textarea_ru">{{ item.text|raw }}</textarea>
     </div>
     {#<div class="tab-pane" id="text_en">
         <textarea class="tinymce focused" name="text" style="width: 96%; height: 380px;" rows="20" id="textarea_en">Тут будет текст на енг.</textarea>
@@ -86,11 +87,11 @@
     <div class="tab-pane" id="meta">
         <div class="row">
             <div class="span2"><label for="keywords">Keywords</label></div>
-            <div class="span9"><input type="text" name="texter[meta][keywords]" id="keywords" value="{% if meta.keywords is defined %}{{ meta.keywords }}{% endif %}" class="focused input-block-level"  /></div>
+            <div class="span9"><input type="text" name="texter[meta][keywords]" id="keywords" value="{% if item.meta.keywords is defined %}{{ item.meta.keywords }}{% endif %}" class="focused input-block-level"  /></div>
         </div>
         <div class="row">
             <div class="span2"><label for="description">Description</label></div>
-            <div class="span9"><input type="text" name="texter[meta][description]" id="description" value="{% if meta.description is defined %}{{ meta.description }}{% endif %}" class="input-block-level"  /></div>
+            <div class="span9"><input type="text" name="texter[meta][description]" id="description" value="{% if item.meta.description is defined %}{{ item.meta.description }}{% endif %}" class="input-block-level"  /></div>
         </div>
     </div>
     <div class="tab-pane" id="preview">@todo preview</div>
@@ -99,10 +100,14 @@
 
 <p class="text-center">
     <button class="btn btn-primary" type="submit" name="submit" value="update">Сохранить</button>
+    {% if app.request.xmlHttpRequest %}
     <button class="btn cmf-cancel" name="submit" value="cancel">Отменить</button>
+    {% else %}
+    <a class="btn cmf-cancel" href="{{ path('cmf_admin_module_manage', {'module': 'Texter'}) }}">Отменить</a>
+    {% endif %}
 </p>
 </form>
-{% endblock body %}
+{% endblock content %}
 
 
 {% block body_js %}

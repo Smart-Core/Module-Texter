@@ -24,4 +24,9 @@ class TexterModule extends Bundle
             'text_item_id' => $item->getId()
         ]);
     }
+
+    public function hasAdmin()
+    {
+        return true;
+    }
 }

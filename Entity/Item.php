@@ -63,6 +63,23 @@ class Item
         return $this->item_id;
     }
 
+    /**
+     * Получить анонс.
+     * @return string
+     */
+    public function getAnnounce()
+    {
+        $a = strip_tags($this->text);
+
+        if (mb_strlen($a, 'utf-8') > 120) {
+            $dotted = '...';
+        } else {
+            $dotted = '';
+        }
+
+        return mb_substr($a, 0, 120, 'utf-8') . $dotted;
+    }
+    
     public function getText()
     {
         return $this->text;

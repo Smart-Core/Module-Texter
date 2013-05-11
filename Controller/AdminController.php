@@ -3,19 +3,66 @@
 namespace SmartCore\Module\Texter\Controller;
 
 use SmartCore\Bundle\EngineBundle\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
 {
-    public function indexAction($slug = null)
+    public function indexAction(Request $request, $slug = null)
     {
+        // @todo сделать роутинг
+        if (!empty($slug)) {
+            $parts = explode('/', $slug);
+
+            return $this->itemAction($request, $slug);
+        }
+        // ----------------------------------------------------
+
+        if (!empty($this->node)) {
+            return $this->itemAction($request, $this->text_item_id);
+        }
+
         $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $item = $em->find('TexterModule:Item', $this->text_item_id);
+        return $this->render('TexterModule:Admin:index.html.twig', [
+            'items' => $em->getRepository('TexterModule:Item')->findAll(),
+        ]);
+    }
+
+    /**
+     * NewFunction
+     */
+    public function itemAction(Request $request, $item_id)
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $item = $em->find('TexterModule:Item', $item_id);
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->get('texter');
+            $item->setText($data['text']);
+            $item->setMeta($data['meta']);
+
+            try {
+                $em->persist($item);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('notice', 'Текст обновлён');
+                return $this->redirect($this->generateUrl('cmf_admin_module_manage', [
+                    'module' => 'Texter',
+                ]));
+            } catch (\Exception $e) {
+                $errors = ['sql_debug' => $e->getMessage()];
+
+                $this->get('session')->getFlashBag()->add('errors', $errors);
+
+                return $this->redirect($this->generateUrl('cmf_admin_module_manage', [
+                    'module' => 'Texter',
+                    'slug' => $item_id,
+                ]));
+            }
+        }
 
         return $this->render('TexterModule:Admin:edit.html.twig', [
-            '_node_id' => $this->node->getId(),
-            'text' => $item->getText(),
-            'meta' => $item->getMeta(),
+            '_node_id' => empty($this->node) ?: $this->node->getId(),
+            'item' => $item,
         ]);
     }
 }
