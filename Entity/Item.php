@@ -3,106 +3,130 @@
 namespace SmartCore\Module\Texter\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="text_items")
+ * @ORM\Table(name="texter")
  */
 class Item
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $item_id;
-    
-    /**
-     * @ORM\Column(type="string", length=8, nullable=TRUE)
-     */
-    protected $language;
-    
-    /**
-     * @ORM\Column(type="text", nullable=TRUE)
-     */
-    protected $text;
+    use ColumnTrait\Id;
+    use ColumnTrait\CreatedAt;
+    use ColumnTrait\UpdatedAt;
+    use ColumnTrait\Text;
+    use ColumnTrait\UserId;
 
     /**
-     * @ORM\Column(type="array")
+     * @var string
      *
+     * @ORM\Column(type="string", length=8, nullable=true)
+     */
+    protected $locale;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint")
+     */
+    protected $editor;
+
+    /**
      * @var array
+     *
+     * @ORM\Column(type="array")
      */
     protected $meta;
 
     /**
-     * @ORM\Column(type="datetime")
+     * Constructor.
      */
-    protected $datetime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $user_id = 0;
-    
     public function __construct()
     {
-        $this->datetime = new \DateTime();
-        $this->language = 'ru';
-        $this->meta = []; //new ArrayCollection();
-        $this->text = null;
+        $this->created_at = new \DateTime();
+        $this->locale   = 'ru';
+        $this->meta     = [];
+        $this->text     = null;
+        $this->editor   = 1;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getText();
     }
 
-    public function getId()
-    {
-        return $this->item_id;
-    }
-
     /**
-     * Получить анонс.
      * @return string
      */
     public function getAnnounce()
     {
         $a = strip_tags($this->text);
 
-        if (mb_strlen($a, 'utf-8') > 120) {
-            $dotted = '...';
-        } else {
-            $dotted = '';
-        }
+        $dotted = (mb_strlen($a, 'utf-8') > 100) ? '...' : '';
 
-        return mb_substr($a, 0, 120, 'utf-8') . $dotted;
+        return mb_substr($a, 0, 100, 'utf-8').$dotted;
     }
-    
-    public function getText()
+
+    /**
+     * @param int $editor
+     *
+     * @return $this
+     */
+    public function setEditor($editor)
     {
-        return $this->text;
+        $this->editor = $editor;
+
+        return $this;
     }
 
-    public function setText($text)
+    /**
+     * @return int
+     */
+    public function getEditor()
     {
-        $this->text = $text;
+        return $this->editor;
     }
 
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @return array
+     */
     public function getMeta()
     {
-        if ($this->meta) {
-            return $this->meta;
-        } else {
-            return [];
-        }
+        return empty($this->meta) ? [] : $this->meta;
     }
 
-    public function setMeta($meta)
+    /**
+     * @param array $meta
+     *
+     * @return $this
+     */
+    public function setMeta(array $meta)
     {
         if (is_array($meta)) {
-            foreach($meta as $key => $value) {
+            foreach ($meta as $key => $value) {
                 if (empty($value)) {
                     unset($meta[$key]);
                 }
@@ -114,15 +138,5 @@ class Item
         $this->meta = $meta;
 
         return $this;
-    }
-
-    public function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
-    }
-
-    public function getUserId()
-    {
-        return $this->user_id;
     }
 }

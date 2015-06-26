@@ -2,28 +2,21 @@
 
 namespace SmartCore\Module\Texter\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
+use SmartCore\Bundle\CMSBundle\Module\AbstractNodePropertiesFormType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class NodePropertiesFormType extends AbstractType
+class NodePropertiesFormType extends AbstractNodePropertiesFormType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text_item_id', 'integer', ['attr' => ['class' => 'focused']])
+            ->add('text_item_id', 'integer', ['attr' => ['autofocus' => 'autofocus']])
+            ->add('editor', 'checkbox',      ['required' => false, 'label' => 'Визуальный редактор'])
         ;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults([
-            'csrf_protection' => false,
-        ]);
     }
 
     public function getName()
     {
-        return 'texter_node_properties';
+        return 'smart_module_texter_node_properties';
     }
 }

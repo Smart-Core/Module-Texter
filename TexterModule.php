@@ -2,15 +2,18 @@
 
 namespace SmartCore\Module\Texter;
 
-use SmartCore\Bundle\EngineBundle\Module\Bundle;
+use SmartCore\Bundle\CMSBundle\Entity\Node;
+use SmartCore\Bundle\CMSBundle\Module\ModuleBundle;
 use SmartCore\Module\Texter\Entity\Item;
 
-class TexterModule extends Bundle
+class TexterModule extends ModuleBundle
 {
     /**
      * Действие при создании ноды.
+     *
+     * @param Node $node
      */
-    public function createNode($node)
+    public function createNode(Node $node)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
 
@@ -18,15 +21,30 @@ class TexterModule extends Bundle
         $item->setUserId($this->container->get('security.context')->getToken()->getUser()->getId());
 
         $em->persist($item);
-        $em->flush();
+        $em->flush($item);
 
         $node->setParams([
-            'text_item_id' => $item->getId()
+            'text_item_id' => $item->getId(),
+            'editor' => true,
         ]);
     }
 
-    public function hasAdmin()
+    /**
+     * Действие при обновлении ноды.
+     *
+     * @param Node $node
+     */
+    public function updateNode(Node $node)
     {
-        return true;
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        /** @var Item $item */
+        $item = $em->find('TexterModule:Item', $node->getParam('text_item_id'));
+
+        if ($item) {
+            $item->setEditor((int) $node->getParam('editor'));
+            $em->persist($item);
+            $em->flush($item);
+        }
     }
 }

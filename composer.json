@@ -1,9 +1,9 @@
 {
     "name": "smart-core/module-texter",
+    "require": {
+        "smart-core/cms-bundle": "*"
+    },
     "autoload": {
-        "psr-0": {
-            "SmartCore\\Module\\Texter": ""
-        }
-    },                
-    "target-dir": "SmartCore/Module/Texter"
+        "psr-4": { "SmartCore\\Module\\Texter\\": "" }
+    }
 }
