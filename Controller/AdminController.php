@@ -109,27 +109,36 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  int $id
+     * @param  Item $item
      *
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @todo пагинацию.
      */
-    public function historyAction($id)
+    public function historyAction(Item $item)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        $item = $em->getRepository('TexterModule:Item')->find($id);
+        $em = $this->get('doctrine.orm.entity_manager');
 
         $itemsHistory = $em->getRepository('TexterModule:ItemHistory')->findBy(
-            ['item_id' => $id],
+            ['item' => $item],
             ['created_at' => 'DESC']
         );
 
         return $this->render('TexterModule:Admin:history.html.twig', [
             'item' => $item,
             'items_history' => $itemsHistory,
+        ]);
+    }
+
+    /**
+     * @param ItemHistory $itemHistory
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function historyViewAction(ItemHistory $itemHistory)
+    {
+        return $this->render('TexterModule:Admin:history_view.html.twig', [
+            'item_history' => $itemHistory,
         ]);
     }
 

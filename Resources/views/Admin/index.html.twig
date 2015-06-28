@@ -35,7 +35,11 @@
                                 <span class="label label-danger label-important" title="Этот текст нигде не используется">{{ 'No'|trans }}</span>
                             {% endif %}
                         </td>
-                        <td><a href="{{ path('smart_module.texter.admin.history', {'id': item.id}) }}" title="История"><i class="icon-time"></i><span class="glyphicon glyphicon-time" aria-hidden="true"></span></a></td>
+                        <td>
+                            {% if item.history.count > 0 %}
+                                <a href="{{ path('smart_module.texter.admin.history', {'id': item.id}) }}" title="История"><i class="icon-time"></i><span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

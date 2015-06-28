@@ -9,7 +9,6 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  * @ORM\Entity
  * @ORM\Table(name="texter_history",
  *      indexes={
- *          @ORM\Index(columns={"item_id"}),
  *          @ORM\Index(columns={"is_deleted"}),
  *      }
  * )
@@ -21,13 +20,6 @@ class ItemHistory
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Text;
     use ColumnTrait\UserId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     */
-    protected $item_id;
 
     /**
      * @var string
@@ -49,6 +41,13 @@ class ItemHistory
      * @ORM\Column(type="array")
      */
     protected $meta;
+
+    /**
+     * @var Item
+     *
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="history")
+     */
+    protected $item;
 
     /**
      * Constructor.
@@ -159,5 +158,25 @@ class ItemHistory
     public function getMeta()
     {
         return $this->meta;
+    }
+
+    /**
+     * @return Item
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param Item $item
+     *
+     * @return $this
+     */
+    public function setItem(Item $item)
+    {
+        $this->item = $item;
+
+        return $this;
     }
 }

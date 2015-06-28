@@ -5,9 +5,16 @@ smart_module.texter.admin:
         _controller: TexterModule:Admin:index
 
 smart_module.texter.admin.history:
-    path: /{id}/history
+    path: /{id}/history/
     defaults:
         _controller: TexterModule:Admin:history
+    requirements:
+        id: \d+
+
+smart_module.texter.admin.history_view:
+    path: /{id}/history/view/
+    defaults:
+        _controller: TexterModule:Admin:historyView
     requirements:
         id: \d+
 

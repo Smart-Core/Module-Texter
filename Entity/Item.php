@@ -2,6 +2,7 @@
 
 namespace SmartCore\Module\Texter\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
@@ -39,6 +40,13 @@ class Item
     protected $meta;
 
     /**
+     * @var ItemHistory[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ItemHistory", mappedBy="item", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+     */
+    protected $history;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -48,6 +56,7 @@ class Item
         $this->meta     = [];
         $this->text     = null;
         $this->editor   = 1;
+        $this->history  = new ArrayCollection();
     }
 
     /**
@@ -136,6 +145,26 @@ class Item
         }
 
         $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * @return ItemHistory[]|ArrayCollection
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
+     * @param ItemHistory[]|ArrayCollection $history
+     *
+     * @return $this
+     */
+    public function setHistory($history)
+    {
+        $this->history = $history;
 
         return $this;
     }
