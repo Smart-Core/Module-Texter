@@ -64,6 +64,7 @@ class ItemHistory
         }
 
         $this->created_at   = new \DateTime();
+        $this->is_deleted   = false;
     }
 
     /**
