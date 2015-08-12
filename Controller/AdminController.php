@@ -94,7 +94,7 @@ class AdminController extends Controller
                     return $this->redirect($this->generateUrl('smart_module.texter.admin'));
                 }
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('errors', ['sql_debug' => $e->getMessage()]);
+                $this->get('session')->getFlashBag()->add('error', ['sql_debug' => $e->getMessage()]);
 
                 return $this->redirect($this->generateUrl('smart_module.texter.admin.edit', ['id' => $id]));
             }
