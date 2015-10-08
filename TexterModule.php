@@ -8,6 +8,8 @@ use SmartCore\Module\Texter\Entity\Item;
 
 class TexterModule extends ModuleBundle
 {
+    protected $adminMenuBeforeCode = '<i class="fa fa-text-height"></i>';
+
     /**
      * Действие при создании ноды.
      *
