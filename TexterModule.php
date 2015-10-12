@@ -20,7 +20,7 @@ class TexterModule extends ModuleBundle
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         $item = new Item();
-        $item->setUserId($this->container->get('security.token_storage')->getToken()->getUser()->getId());
+        $item->setUser($this->container->get('security.token_storage')->getToken()->getUser());
 
         $em->persist($item);
         $em->flush($item);

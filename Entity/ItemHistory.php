@@ -19,7 +19,7 @@ class ItemHistory
     use ColumnTrait\IsDeleted;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Text;
-    use ColumnTrait\UserId;
+    use ColumnTrait\FosUser;
 
     /**
      * @var string
@@ -60,7 +60,7 @@ class ItemHistory
             $this->locale   = $item->getLocale();
             $this->meta     = $item->getMeta();
             $this->text     = $item->getText();
-            $this->user_id  = $item->getUserId();
+            $this->user     = $item->getUser();
         }
 
         $this->created_at   = new \DateTime();

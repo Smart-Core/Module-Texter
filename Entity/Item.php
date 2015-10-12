@@ -16,7 +16,7 @@ class Item
     use ColumnTrait\CreatedAt;
     use ColumnTrait\UpdatedAt;
     use ColumnTrait\Text;
-    use ColumnTrait\UserId;
+    use ColumnTrait\FosUser;
 
     /**
      * @var string

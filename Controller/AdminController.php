@@ -162,7 +162,7 @@ class AdminController extends Controller
                 ->setMeta($historyItem->getMeta())
                 ->setText($historyItem->getText())
                 ->setText($historyItem->getText())
-                ->setUserId($historyItem->getUserId())
+                ->setUser($historyItem->getUser())
             ;
 
             $em->persist($item);
