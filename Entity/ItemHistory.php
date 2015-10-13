@@ -9,14 +9,14 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  * @ORM\Entity
  * @ORM\Table(name="texter_history",
  *      indexes={
- *          @ORM\Index(columns={"is_deleted"}),
+ *          @ORM\Index(columns={"deleted_at"}),
  *      }
  * )
  */
 class ItemHistory
 {
     use ColumnTrait\Id;
-    use ColumnTrait\IsDeleted;
+    use ColumnTrait\DeletedAt;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Text;
     use ColumnTrait\FosUser;
@@ -64,7 +64,6 @@ class ItemHistory
         }
 
         $this->created_at   = new \DateTime();
-        $this->is_deleted   = false;
     }
 
     /**
