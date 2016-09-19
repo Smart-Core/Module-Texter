@@ -3,6 +3,8 @@
 namespace SmartCore\Module\Texter\Form\Type;
 
 use SmartCore\Bundle\CMSBundle\Module\AbstractNodePropertiesFormType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class NodePropertiesFormType extends AbstractNodePropertiesFormType
@@ -10,8 +12,8 @@ class NodePropertiesFormType extends AbstractNodePropertiesFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text_item_id', 'integer', ['attr' => ['autofocus' => 'autofocus']])
-            ->add('editor', 'checkbox',      ['required' => false, 'label' => 'Визуальный редактор'])
+            ->add('text_item_id', IntegerType::class, ['attr' => ['autofocus' => 'autofocus']]) // 'integer'
+            ->add('editor', CheckboxType::class,      ['required' => false, 'label' => 'Визуальный редактор']) // 'checkbox'
         ;
     }
 
