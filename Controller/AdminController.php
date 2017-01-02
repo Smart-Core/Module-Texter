@@ -86,7 +86,7 @@ class AdminController extends Controller
                 $em->persist($history);
                 $em->flush($history);
 
-                $this->get('session')->getFlashBag()->add('success', 'Текст обновлён (id: <b>'.$item->getId().'</b>)'); // @todo перевод.
+                $this->addFlash('success', 'Текст обновлён (id: <b>'.$item->getId().'</b>)'); // @todo перевод.
 
                 if ($request->request->has('update_and_redirect_to_site') and $folderPath) {
                     return $this->redirect($folderPath);
@@ -94,7 +94,7 @@ class AdminController extends Controller
                     return $this->redirect($this->generateUrl('smart_module.texter.admin'));
                 }
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', ['sql_debug' => $e->getMessage()]);
+                $this->addFlash('error', ['sql_debug' => $e->getMessage()]);
 
                 return $this->redirect($this->generateUrl('smart_module.texter.admin.edit', ['id' => $id]));
             }
@@ -168,9 +168,9 @@ class AdminController extends Controller
             $em->persist($item);
             $em->flush($item);
 
-            $this->get('session')->getFlashBag()->add('success', 'Откат успешно выполнен.'); // @todo перевод.
+            $this->addFlash('success', 'Откат успешно выполнен.'); // @todo перевод.
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Непредвиденная ошибка при выполнении отката'); // @todo перевод.
+            $this->addFlash('error', 'Непредвиденная ошибка при выполнении отката'); // @todo перевод.
         }
 
         return $this->redirect($this->generateUrl('smart_module.texter.admin'));
