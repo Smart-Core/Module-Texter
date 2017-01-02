@@ -39,22 +39,19 @@ class AdminController extends Controller
             $item->_folderPath = $folderPath;
         }
 
-        return $this->render('TexterModule:Admin:index.html.twig', [
+        return $this->render('@TexterModule/Admin/index.html.twig', [
             'items' => $items,
         ]);
     }
 
     /**
      * @param  Request $request
-     * @param  int $id
+     * @param  Item    $item
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function itemAction(Request $request, $id)
+    public function itemAction(Request $request, Item $item)
     {
-        $em = $this->getDoctrine()->getManager();
-        $item = $em->find('TexterModule:Item', $id);
-
         $folderPath = null;
         foreach ($this->get('cms.node')->findByModule('Texter') as $node) {
             if ($node->getParam('text_item_id') === (int) $item->getId()) {
@@ -68,8 +65,10 @@ class AdminController extends Controller
             $oldItem = clone $item;
 
             $data = $request->request->get('texter');
-            $item->setText($data['text']);
-            $item->setMeta($data['meta']);
+            $item
+                ->setText($data['text'])
+                ->setMeta($data['meta'])
+            ;
 
             $this->getCacheService()->deleteTag('smart_module.texter');
 
@@ -79,30 +78,28 @@ class AdminController extends Controller
             }
 
             try {
-                $em->persist($item);
-                $em->flush($item);
+                $this->persist($item, true);
 
                 $history = new ItemHistory($oldItem);
-                $em->persist($history);
-                $em->flush($history);
+                $this->persist($history, true);
 
-                $this->addFlash('success', 'Текст обновлён (id: <b>'.$item->getId().'</b>)'); // @todo перевод.
+                $this->addFlash('success', 'Текст обновлён (id: <b>'.$item->getId().'</b>)');
 
                 if ($request->request->has('update_and_redirect_to_site') and $folderPath) {
                     return $this->redirect($folderPath);
                 } else {
-                    return $this->redirect($this->generateUrl('smart_module.texter.admin'));
+                    return $this->redirectToRoute('smart_module.texter.admin');
                 }
             } catch (\Exception $e) {
                 $this->addFlash('error', ['sql_debug' => $e->getMessage()]);
 
-                return $this->redirect($this->generateUrl('smart_module.texter.admin.edit', ['id' => $id]));
+                return $this->redirectToRoute('smart_module.texter.admin.edit', ['id' => $item->getId()]);
             }
         }
 
         $item->_folderPath = $folderPath;
 
-        return $this->render('TexterModule:Admin:edit.html.twig', [
+        return $this->render('@TexterModule/Admin/edit.html.twig', [
             '_node_id' => empty($this->node) ?: $this->node->getId(),
             'item'     => $item,
         ]);
@@ -124,7 +121,7 @@ class AdminController extends Controller
             ['created_at' => 'DESC']
         );
 
-        return $this->render('TexterModule:Admin:history.html.twig', [
+        return $this->render('@TexterModule/Admin/history.html.twig', [
             'item' => $item,
             'items_history' => $itemsHistory,
         ]);
@@ -137,7 +134,7 @@ class AdminController extends Controller
      */
     public function historyViewAction(ItemHistory $itemHistory)
     {
-        return $this->render('TexterModule:Admin:history_view.html.twig', [
+        return $this->render('@TexterModule/Admin/history_view.html.twig', [
             'item_history' => $itemHistory,
         ]);
     }
@@ -150,7 +147,7 @@ class AdminController extends Controller
     public function rollbackAction($id)
     {
         /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.entity_manager');
 
         $historyItem = $em->find('TexterModule:ItemHistory', $id);
 
@@ -165,14 +162,13 @@ class AdminController extends Controller
                 ->setUser($historyItem->getUser())
             ;
 
-            $em->persist($item);
-            $em->flush($item);
+            $this->persist($item, true);
 
-            $this->addFlash('success', 'Откат успешно выполнен.'); // @todo перевод.
+            $this->addFlash('success', 'Откат успешно выполнен.');
         } else {
-            $this->addFlash('error', 'Непредвиденная ошибка при выполнении отката'); // @todo перевод.
+            $this->addFlash('error', 'Непредвиденная ошибка при выполнении отката');
         }
 
-        return $this->redirect($this->generateUrl('smart_module.texter.admin'));
+        return $this->redirectToRoute('smart_module.texter.admin');
     }
 }

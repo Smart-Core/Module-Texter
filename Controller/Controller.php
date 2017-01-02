@@ -3,8 +3,9 @@
 namespace SmartCore\Module\Texter\Controller;
 
 use SmartCore\Bundle\CMSBundle\Module\NodeTrait;
+use Smart\CoreBundle\Controller\Controller as BaseController;
 
-class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class Controller extends BaseController
 {
     use NodeTrait;
 
