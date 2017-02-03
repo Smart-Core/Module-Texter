@@ -19,7 +19,11 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         if (!empty($this->node)) {
-            return $this->itemAction($request, $this->text_item_id);
+            if (empty($item = $this->getDoctrine()->getRepository('TexterModule:Item')->find($this->text_item_id))) {
+                throw $this->createNotFoundException();
+            }
+
+            return $this->itemAction($request, $item);
         }
 
         // @todo pagination
