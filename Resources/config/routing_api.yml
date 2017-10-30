@@ -3,16 +3,16 @@ smart_module.texter.api:
     path: /
     methods: 'GET'
     defaults:
-        _controller: TexterModule:ApiTexter:json
+        _controller: TexterModuleBundle:ApiTexter:json
 
 smart_module.texter.api_html:
     path: /html
     methods: 'GET'
     defaults:
-        _controller: TexterModule:ApiTexter:html
+        _controller: TexterModuleBundle:ApiTexter:html
 
 smart_module.texter.api_html_w_slash:
     path: /html/
     methods: 'GET'
     defaults:
-        _controller: TexterModule:ApiTexter:html
+        _controller: TexterModuleBundle:ApiTexter:html

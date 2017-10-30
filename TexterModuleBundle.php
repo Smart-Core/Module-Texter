@@ -6,7 +6,7 @@ use SmartCore\Bundle\CMSBundle\Entity\Node;
 use SmartCore\Bundle\CMSBundle\Module\ModuleBundle;
 use SmartCore\Module\Texter\Entity\Item;
 
-class TexterModule extends ModuleBundle
+class TexterModuleBundle extends ModuleBundle
 {
     protected $adminMenuBeforeCode = '<i class="fa fa-text-height"></i>';
 
@@ -40,8 +40,7 @@ class TexterModule extends ModuleBundle
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        /** @var Item $item */
-        $item = $em->find('TexterModule:Item', $node->getParam('text_item_id'));
+        $item = $em->find(Item::class, $node->getParam('text_item_id'));
 
         if ($item) {
             $item->setEditor((int) $node->getParam('editor'));

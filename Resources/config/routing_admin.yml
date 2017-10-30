@@ -2,32 +2,32 @@
 smart_module.texter.admin:
     path: /
     defaults:
-        _controller: TexterModule:Admin:index
+        _controller: TexterModuleBundle:Admin:index
 
 smart_module.texter.admin.history:
     path: /{id}/history/
     defaults:
-        _controller: TexterModule:Admin:history
+        _controller: TexterModuleBundle:Admin:history
     requirements:
         id: \d+
 
 smart_module.texter.admin.history_view:
     path: /{id}/history/view/
     defaults:
-        _controller: TexterModule:Admin:historyView
+        _controller: TexterModuleBundle:Admin:historyView
     requirements:
         id: \d+
 
 smart_module.texter.admin.rollback:
     path: /rollback/{id}/
     defaults:
-        _controller: TexterModule:Admin:rollback
+        _controller: TexterModuleBundle:Admin:rollback
     requirements:
         id: \d+
 
 smart_module.texter.admin.edit:
     path: /{id}/
     defaults:
-        _controller: TexterModule:Admin:item
+        _controller: TexterModuleBundle:Admin:item
     requirements:
         id: \d+

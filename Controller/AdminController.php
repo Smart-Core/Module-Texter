@@ -19,7 +19,7 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         if (!empty($this->node)) {
-            if (empty($item = $this->getDoctrine()->getRepository('TexterModule:Item')->find($this->text_item_id))) {
+            if (empty($item = $this->getDoctrine()->getRepository(Item::class)->find($this->text_item_id))) {
                 throw $this->createNotFoundException();
             }
 
@@ -27,7 +27,7 @@ class AdminController extends Controller
         }
 
         // @todo pagination
-        $items = $this->getDoctrine()->getRepository('TexterModule:Item')->findAll();
+        $items = $this->getDoctrine()->getRepository(Item::class)->findAll();
 
         /** @var $item Item */
         foreach ($items as $item) {
@@ -120,7 +120,7 @@ class AdminController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $itemsHistory = $em->getRepository('TexterModule:ItemHistory')->findBy(
+        $itemsHistory = $em->getRepository(ItemHistory::class)->findBy(
             ['item' => $item],
             ['created_at' => 'DESC']
         );
@@ -153,10 +153,10 @@ class AdminController extends Controller
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $historyItem = $em->find('TexterModule:ItemHistory', $id);
+        $historyItem = $em->find(ItemHistory::class, $id);
 
         if ($historyItem) {
-            $item = $em->find('TexterModule:Item', $historyItem->getItemId());
+            $item = $em->find(Item::class, $historyItem->getItemId());
             $item
                 ->setEditor($historyItem->getEditor())
                 ->setLocale($historyItem->getLocale())
