@@ -32,9 +32,9 @@ class ApiTexterController extends Controller
     }
 
     /**
-     * @param null $item_id
+     * @param int|null $item_id
      *
-     * @return JsonResponse
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function htmlAction($item_id = null)
     {
