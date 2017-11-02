@@ -4,7 +4,7 @@ namespace SmartCore\Module\Texter\Service;
 
 use Doctrine\ORM\EntityManager;
 use RickySu\Tagcache\Adapter\TagcacheAdapter;
-use SmartCore\Module\Texter\Entity\Item;
+use SmartCore\Module\Texter\Entity\TextItem;
 
 class TexterService
 {
@@ -32,14 +32,14 @@ class TexterService
      * @param int $item_id
      * @param int|null $node_id - укаывается для кеширования.
      *
-     * @return mixed|\SmartCore\Module\Texter\Entity\Item
+     * @return mixed|\SmartCore\Module\Texter\Entity\TextItem
      */
     public function get($item_id, $node_id = null)
     {
         $cache_key = 'smart_module.texter'.$item_id;
 
         if (false == $item = $this->cache->get($cache_key)) {
-            $item = $this->em->find(Item::class, $item_id);
+            $item = $this->em->find(TextItem::class, $item_id);
 
             if ($node_id) {
                 $this->cache->set($cache_key, $item, ['smart_module.texter', 'node_'.$node_id]);

@@ -4,7 +4,7 @@ namespace SmartCore\Module\Texter;
 
 use SmartCore\Bundle\CMSBundle\Entity\Node;
 use SmartCore\Bundle\CMSBundle\Module\ModuleBundle;
-use SmartCore\Module\Texter\Entity\Item;
+use SmartCore\Module\Texter\Entity\TextItem;
 
 class TexterModuleBundle extends ModuleBundle
 {
@@ -19,7 +19,7 @@ class TexterModuleBundle extends ModuleBundle
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $item = new Item();
+        $item = new TextItem();
         $item->setUser($this->container->get('security.token_storage')->getToken()->getUser());
 
         $em->persist($item);
@@ -40,7 +40,7 @@ class TexterModuleBundle extends ModuleBundle
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $item = $em->find(Item::class, $node->getParam('text_item_id'));
+        $item = $em->find(TextItem::class, $node->getParam('text_item_id'));
 
         if ($item) {
             $item->setEditor((int) $node->getParam('editor'));

@@ -2,29 +2,26 @@
 
 namespace SmartCore\Module\Texter\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="texter_history",
- *      indexes={
- *          @ORM\Index(columns={"deleted_at"}),
- *      }
- * )
+ * @ORM\Table(name="texter")
  */
-class ItemHistory
+class TextItem
 {
     use ColumnTrait\Id;
-    use ColumnTrait\DeletedAt;
     use ColumnTrait\CreatedAt;
+    use ColumnTrait\UpdatedAt;
     use ColumnTrait\Text;
     use ColumnTrait\FosUser;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=8, nullable=true)
      */
     protected $locale;
 
@@ -43,41 +40,43 @@ class ItemHistory
     protected $meta;
 
     /**
-     * @var Item
+     * @var TextItemHistory[]|ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="history")
+     * @ORM\OneToMany(targetEntity="TextItemHistory", mappedBy="item", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      */
-    protected $item;
+    protected $history;
 
     /**
      * Constructor.
      */
-    public function __construct(Item $item = null)
+    public function __construct()
     {
-        if ($item) {
-            $this->editor   = $item->getEditor();
-            $this->item_id  = $item->getId();
-            $this->locale   = $item->getLocale();
-            $this->meta     = $item->getMeta();
-            $this->text     = $item->getText();
-            $this->user     = $item->getUser();
-        }
-
-        $this->created_at   = new \DateTime();
+        $this->created_at = new \DateTime();
+        $this->locale   = 'ru';
+        $this->meta     = [];
+        $this->text     = null;
+        $this->editor   = 1;
+        $this->history  = new ArrayCollection();
     }
 
     /**
-     * Получить анонс.
-     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getText();
+    }
+
+    /**
      * @return string
      */
     public function getAnnounce()
     {
         $a = strip_tags($this->text);
 
-        $dotted = (mb_strlen($a, 'utf-8') > 120) ? '...' : '';
+        $dotted = (mb_strlen($a, 'utf-8') > 100) ? '...' : '';
 
-        return mb_substr($a, 0, 120, 'utf-8').$dotted;
+        return mb_substr($a, 0, 100, 'utf-8').$dotted;
     }
 
     /**
@@ -101,26 +100,6 @@ class ItemHistory
     }
 
     /**
-     * @param int $item_id
-     *
-     * @return $this
-     */
-    public function setItemId($item_id)
-    {
-        $this->item_id = $item_id;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getItemId()
-    {
-        return $this->item_id;
-    }
-
-    /**
      * @param string $locale
      *
      * @return $this
@@ -141,41 +120,51 @@ class ItemHistory
     }
 
     /**
+     * @return array
+     */
+    public function getMeta()
+    {
+        return empty($this->meta) ? [] : $this->meta;
+    }
+
+    /**
      * @param array $meta
      *
      * @return $this
      */
-    public function setMeta($meta)
+    public function setMeta(array $meta)
     {
+        if (is_array($meta)) {
+            foreach ($meta as $key => $value) {
+                if (empty($value)) {
+                    unset($meta[$key]);
+                }
+            }
+        } else {
+            $this->meta = [];
+        }
+
         $this->meta = $meta;
 
         return $this;
     }
 
     /**
-     * @return array
+     * @return TextItemHistory[]|ArrayCollection
      */
-    public function getMeta()
+    public function getHistory()
     {
-        return $this->meta;
+        return $this->history;
     }
 
     /**
-     * @return Item
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param Item $item
+     * @param TextItemHistory[]|ArrayCollection $history
      *
      * @return $this
      */
-    public function setItem(Item $item)
+    public function setHistory($history)
     {
-        $this->item = $item;
+        $this->history = $history;
 
         return $this;
     }

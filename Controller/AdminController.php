@@ -3,8 +3,8 @@
 namespace SmartCore\Module\Texter\Controller;
 
 use SmartCore\Bundle\CMSBundle\Module\CacheTrait;
-use SmartCore\Module\Texter\Entity\Item;
-use SmartCore\Module\Texter\Entity\ItemHistory;
+use SmartCore\Module\Texter\Entity\TextItem;
+use SmartCore\Module\Texter\Entity\TextItemHistory;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
@@ -19,7 +19,7 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         if (!empty($this->node)) {
-            if (empty($item = $this->getDoctrine()->getRepository(Item::class)->find($this->text_item_id))) {
+            if (empty($item = $this->getDoctrine()->getRepository(TextItem::class)->find($this->text_item_id))) {
                 throw $this->createNotFoundException();
             }
 
@@ -27,9 +27,9 @@ class AdminController extends Controller
         }
 
         // @todo pagination
-        $items = $this->getDoctrine()->getRepository(Item::class)->findAll();
+        $items = $this->getDoctrine()->getRepository(TextItem::class)->findAll();
 
-        /** @var $item Item */
+        /** @var $item TextItem */
         foreach ($items as $item) {
             $folderPath = null;
             foreach ($this->get('cms.node')->findByModule('Texter') as $node) {
@@ -49,12 +49,12 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
-     * @param  Item    $item
+     * @param  Request  $request
+     * @param  TextItem $item
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function itemAction(Request $request, Item $item)
+    public function itemAction(Request $request, TextItem $item)
     {
         $folderPath = null;
         foreach ($this->get('cms.node')->findByModule('Texter') as $node) {
@@ -84,7 +84,7 @@ class AdminController extends Controller
             try {
                 $this->persist($item, true);
 
-                $history = new ItemHistory($oldItem);
+                $history = new TextItemHistory($oldItem);
                 $this->persist($history, true);
 
                 $this->addFlash('success', 'Текст обновлён (id: <b>'.$item->getId().'</b>)');
@@ -110,17 +110,17 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Item $item
+     * @param  TextItem $item
      *
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @todo пагинацию.
      */
-    public function historyAction(Item $item)
+    public function historyAction(TextItem $item)
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $itemsHistory = $em->getRepository(ItemHistory::class)->findBy(
+        $itemsHistory = $em->getRepository(TextItemHistory::class)->findBy(
             ['item' => $item],
             ['created_at' => 'DESC']
         );
@@ -132,11 +132,11 @@ class AdminController extends Controller
     }
 
     /**
-     * @param ItemHistory $itemHistory
+     * @param TextItemHistory $itemHistory
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function historyViewAction(ItemHistory $itemHistory)
+    public function historyViewAction(TextItemHistory $itemHistory)
     {
         return $this->render('@TexterModule/Admin/history_view.html.twig', [
             'item_history' => $itemHistory,
@@ -153,10 +153,10 @@ class AdminController extends Controller
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $historyItem = $em->find(ItemHistory::class, $id);
+        $historyItem = $em->find(TextItemHistory::class, $id);
 
         if ($historyItem) {
-            $item = $em->find(Item::class, $historyItem->getItemId());
+            $item = $em->find(TextItem::class, $historyItem->getItemId());
             $item
                 ->setEditor($historyItem->getEditor())
                 ->setLocale($historyItem->getLocale())
