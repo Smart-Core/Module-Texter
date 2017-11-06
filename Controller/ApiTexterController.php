@@ -5,7 +5,7 @@ namespace SmartCore\Module\Texter\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiTexterAbstractController extends AbstractController
+class ApiTexterController extends AbstractController
 {
     /**
      * @param null $item_id

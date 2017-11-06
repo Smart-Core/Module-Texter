@@ -7,7 +7,7 @@ use SmartCore\Module\Texter\Entity\TextItem;
 use SmartCore\Module\Texter\Entity\TextItemHistory;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminAbstractController extends AbstractController
+class AdminController extends AbstractController
 {
     use CacheTrait;
 
