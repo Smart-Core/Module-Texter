@@ -4,7 +4,7 @@ namespace SmartCore\Module\Texter\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class TexterAbstractController extends AbstractController
+class TexterController extends AbstractController
 {
     /**
      * @return Response
